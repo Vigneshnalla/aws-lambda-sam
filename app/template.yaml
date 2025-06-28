@@ -23,6 +23,8 @@ Resources:
       AutoPublishAlias: live
       DeploymentPreference:
         Type: Linear10PercentEvery1Minute
+        Alarms:
+          - !Ref HelloWorldErrors
       Architectures:
         - x86_64
       Policies:
@@ -34,7 +36,20 @@ Resources:
           Properties:
             Path: /hello
             Method: get
-
+  HelloWorldErrors:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      MetricName: Errors
+      Statistic: Sum
+      ComparisonOperator: GreaterThanThreshold
+      Threshold: 5
+      Period: 60
+      EvaluationPeriods: 1
+      TreatMissingData: notBreaching
+      Namespace: "AWS/Lambda"
+      Dimensions:
+        - Name: FunctionName
+          Value: !Ref HelloWorldFunction
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
   # Find out more about other implicit resources you can reference within SAM
