@@ -5,5 +5,5 @@ module.exports = function htmlResponse(body) {
     headers: {
       'Content-Type': 'text/html'
     }
-  };
+  }
 };
